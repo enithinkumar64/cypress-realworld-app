@@ -36,6 +36,7 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
   const xsBreakpoint = useMediaQuery(theme.breakpoints.only("xs"));
 
   const initialAmountRange = [0, 100];
+  const highValueAmountRange = [50, 100];
   const [amountRangeValue, setAmountRangeValue] = React.useState<number[]>(initialAmountRange);
 
   const [amountRangeAnchorEl, setAmountRangeAnchorEl] = React.useState<HTMLDivElement | null>(null);
@@ -91,6 +92,18 @@ const TransactionListAmountRangeFilter: React.FC<TransactionListAmountRangeFilte
               }}
             >
               Clear
+            </Button>
+            <Button
+              data-test="transaction-list-filter-high-value-button"
+              onClick={() => {
+                setAmountRangeValue(highValueAmountRange);
+                filterAmountRange({
+                  amountMin: padAmountWithZeros(first(highValueAmountRange) as number),
+                  amountMax: padAmountWithZeros(last(highValueAmountRange) as number),
+                });
+              }}
+            >
+              High Value
             </Button>
           </Grid>
         </Grid>
