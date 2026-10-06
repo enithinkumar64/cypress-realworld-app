@@ -314,6 +314,22 @@ describe("Transaction Feed", function () {
       max: 800,
     };
 
+    it("filters transactions using the High Value button", function () {
+      cy.wait("@publicTransactions");
+      cy.getBySelLike("filter-amount-range-button").click();
+      cy.getBySel("transaction-list-filter-high-value-button").click();
+
+      cy.wait("@publicTransactions").then(({ request }) => {
+        expect(request.url).to.include("amountMin=50000");
+        expect(request.url).to.include("amountMax=100000");
+      });
+
+      cy.getBySelLike("filter-amount-range-text").should(
+        "contain",
+        "$500 - $1,000"
+      );
+    });
+
     _.each(feedViews, (feed, feedName) => {
       it(`filters ${feedName} transaction feed by amount range`, function () {
         cy.getBySelLike(feed.tab).click({ force: true });
