@@ -141,6 +141,24 @@ describe("Transactions API", function () {
         expect(response.body.transaction.requestStatus).to.eq("pending");
       });
     });
+
+    it("rejects a transaction with a zero amount", function () {
+      cy.request({
+        method: "POST",
+        url: `${apiTransactions}`,
+        failOnStatusCode: false,
+        body: {
+          transactionType: "payment",
+          source: ctx.bankAccountId,
+          receiverId: ctx.receiver!.id,
+          description: "Zero amount payment",
+          amount: 0,
+          privacyLevel: "public",
+        },
+      }).then((response) => {
+        expect(response.status).to.eq(422);
+      });
+    });
   });
 
   context("PATCH /transactions/:transactionId", function () {
